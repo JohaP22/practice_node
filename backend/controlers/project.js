@@ -46,7 +46,43 @@ var controller={
                 projects
             })
         })
+    },
+    updateProject:(req, res)=>{
+        var projectId = req.params.id;
+        var update = req.body;
+
+        projectSave.findByIdAndUpdate(projectId, update, {new:true}, (err,projectUpdate)=>{
+            if(err) return res.status(500).send({message:'Error al actualizar datos'})
+            if(!projectUpdate) return res.status(404).send({message:'El documento no existe'})
+            return res.status(200).send({
+                project:projectUpdate
+            })
+        })
+    },
+    deleteProject:(req, res)=>{
+        var projectId = req.params.id;
+        projectSave.findByIdAndDelete(projectId, (err,projectDelete)=>{
+            if(err) return res.status(500).send({message:'Error al borrar datos'})
+            if(!projectDelete) return res.status(404).send({message:'El documento no existe'})
+            return res.status(200).send({
+                project:projectDelete
+            })
+        })
+    },
+    uploadImage:(req,res)=>{
+        var projectId= req.params.id;
+        var fileName="Image not found";
+        if(req.files){
+            res.status(200).send({
+                file:req.files
+            })
+        }else{
+            res.status(200).send({
+                message:fileName
+            })
+        }
     }
+    
     
 };
 module.exports = controller;
