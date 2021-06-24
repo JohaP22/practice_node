@@ -26,6 +26,27 @@ var controller={
         if(!projectSaved) return res.status(404).send('No existe');
         return res.status(200).send({project:projectSaved});
       })
+    },
+    getProject:(req, res)=>{
+        var projectId = req.params.id;
+        if(projectId==null) return res.status(404).send({message:'El proyecto no existe'})
+        projectSave.findById(projectId,(err,project)=>{
+            if(err) return res.status(500).send({message:'Error al devolver datos'})
+            if(!project) return res.status(404).send({message:'El proyecto no existe'})
+            return res.status(200).send({
+                project
+            })
+        })
+    },
+    getProjects:(req, res)=>{
+        projectSave.find({}).sort('name').exec((err,projects)=>{
+            if(err) return res.status(500).send({message:'Error al devolver datos'})
+            if(!projects) return res.status(404).send({message:'El proyecto no existe'})
+            return res.status(200).send({
+                projects
+            })
+        })
     }
+    
 };
 module.exports = controller;
