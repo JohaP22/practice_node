@@ -2,6 +2,7 @@
 var projectSave = require('../modelo/project');
 const { param } = require('../routes/project');
 var fs = require('fs');
+var pathServer = require('path');
 var controller={
     home: (req, res)=>{
         return res.status(200).send(
@@ -93,6 +94,17 @@ var controller={
         }else{
             res.status(200).send({
                 message:fileName
+            })
+        }
+    },
+    getImageFile:(req,res)=>{
+        var file = req.params.image;
+        var path= 'backend/uploads/'+file;
+        if(fs.existsSync(path) == true){
+            return res.sendFile(pathServer.resolve(path))
+        }else{
+            return res.status(200).send({
+                message:'No existe la img'
             })
         }
     }
